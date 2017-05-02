@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ZopaQuote": {
+      "commandName": "Project",
+      "commandLineArgs": "MarketData1.csv 2000 b"
+    }
+  }
+}
