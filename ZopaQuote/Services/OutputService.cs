@@ -21,9 +21,9 @@ namespace ZopaQuote.Services
             return Console.ReadLine();
         }
 
-        public void ShowHelper()
+        public void ShowHelper(string errorMessage)
         {            
-            Write($"Insufficient or too many arguments.",
+            Write(errorMessage,
                 $"Usage: {ApplicationName} <filename> <amount>",
                 $"Example: {ApplicationName} MarketData.csv 1200");
         }

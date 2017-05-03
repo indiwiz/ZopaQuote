@@ -4,6 +4,6 @@
     {
         void Write(params string[] messages);
         string Prompt(string message);
-        void ShowHelper();
+        void ShowHelper(string errorMessage);
     }
 }
