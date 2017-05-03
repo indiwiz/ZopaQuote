@@ -1,0 +1,8 @@
+﻿{
+  "AppConfiguration": {
+    "LoanAmountRange": {
+      "Minimum": "1000",
+      "Maximum": "15000"
+    }
+  }
+}

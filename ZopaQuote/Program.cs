@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using ZopaQuote.Services;
@@ -9,7 +10,7 @@ namespace ZopaQuote
     {
         private const string UnexpectedError = "Unexpected error occurred";
         static void Main(string[] args)
-        {            
+        {
             var serviceProvider = ConfigureServices();
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
@@ -39,10 +40,19 @@ namespace ZopaQuote
 
         private static IServiceProvider ConfigureServices()
         {
+            var configurationBuilder = new ConfigurationBuilder();
+            configurationBuilder.AddJsonFile("config.json", true, true);
+            var configuration = configurationBuilder.Build();
+            var appConfig = new AppConfiguration();
+            appConfig.LoanAmountRange.Minimum = configuration.GetValue<int>("AppConfiguration:LoanAmountRange:Minimum", 100);
+            appConfig.LoanAmountRange.Maximum = configuration.GetValue<int>("AppConfiguration:LoanAmountRange:Maximum", 1000);
+
+
             var serviceProvider = new ServiceCollection()
                     .AddLogging()                    
                     .AddSingleton<IOutputService, OutputService>()
                     .AddSingleton<IApplication, Application>()
+                    .AddSingleton<AppConfiguration>(appConfig)
                     .AddTransient<IFileService, FileService>()
                     .BuildServiceProvider();
 

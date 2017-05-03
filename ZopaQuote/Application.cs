@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
-using Microsoft.Extensions.Logging;
 using ZopaQuote.Services;
 
 namespace ZopaQuote
@@ -9,12 +9,15 @@ namespace ZopaQuote
     {
         private readonly ILogger _logger;
         private readonly IFileService _fileService;
+        private readonly AppConfiguration _configuration;
 
         public Application(
             ILoggerFactory loggerFactory,
-            IFileService fileService)
+            IFileService fileService,
+            AppConfiguration configuration)
         {
             _logger = loggerFactory.CreateLogger<Application>();
+            _configuration = configuration;
             _fileService = fileService;
         }
 
@@ -22,6 +25,13 @@ namespace ZopaQuote
         {
             _logger.LogDebug($"Arguments: {string.Join(", ", args)}");
 
+            ValidateArguments(args);
+
+            throw new Exception("Time pass");
+        }
+
+        private void ValidateArguments(string[] args)
+        {
             if (!HasEnoughArguments(args))
             {
                 throw ValidationException.InvalidArgumentException;
@@ -37,12 +47,21 @@ namespace ZopaQuote
                 throw ValidationException.InvalidLoanAmountException;
             }
 
-            throw new Exception("Time pass");
+            if (!IsLoanAmountInRange(loanAmount))
+            {
+                throw ValidationException.LoanAmountNotInRangeException(_configuration.LoanAmountRange.Minimum, _configuration.LoanAmountRange.Maximum);
+            }
         }
 
         private bool ValidateLoanAmount(string loanAmount, out int validatedLoanAmount)
         {
-            return int.TryParse(loanAmount, out validatedLoanAmount);
+            return int.TryParse(loanAmount, out validatedLoanAmount) && validatedLoanAmount % 100 == 0;
+        }
+
+        private bool IsLoanAmountInRange(int loanAmount)
+        {
+            return loanAmount >= _configuration.LoanAmountRange.Minimum 
+                && loanAmount <= _configuration.LoanAmountRange.Maximum;
         }
 
         private bool ValidateFileName(string fileName, out string validatedFileName)
