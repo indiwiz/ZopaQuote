@@ -2,7 +2,8 @@
 {
     public interface IOutputService
     {
-        void WriteLine(string message);
+        void Write(params string[] messages);
         string Prompt(string message);
+        void ShowHelper();
     }
 }

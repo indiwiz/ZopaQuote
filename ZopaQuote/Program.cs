@@ -14,8 +14,11 @@ namespace ZopaQuote
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
             logger.LogInformation("Program Started.");
 
+            var application = serviceProvider.GetService<IApplication>();
+            application.Run(args);
+
             var outputService = serviceProvider.GetService<IOutputService>();
-            outputService.Prompt("End of Program. Press any key to exit.");
+            outputService.Prompt("End of Program. Press 'Enter' key to exit.");
         }
 
         private static IServiceProvider ConfigureServices()
@@ -23,6 +26,7 @@ namespace ZopaQuote
             var serviceProvider = new ServiceCollection()
                     .AddLogging()
                     .AddSingleton<IOutputService, OutputService>()
+                    .AddSingleton<IApplication, Application>()
                     .BuildServiceProvider();
 
             serviceProvider
