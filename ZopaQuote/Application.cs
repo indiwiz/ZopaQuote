@@ -1,24 +1,26 @@
 ﻿using System;
 using System.IO;
+using Microsoft.Extensions.Logging;
 using ZopaQuote.Services;
 
 namespace ZopaQuote
 {
     public class Application : IApplication
     {
-        private readonly IOutputService _outputService;
+        private readonly ILogger _logger;
         private readonly IFileService _fileService;
 
-        public Application(IOutputService outputService,
+        public Application(
+            ILoggerFactory loggerFactory,
             IFileService fileService)
         {
-            _outputService = outputService;
+            _logger = loggerFactory.CreateLogger<Application>();
             _fileService = fileService;
         }
 
         public void Run(string[] args)
         {
-            _outputService.Write(args);
+            _logger.LogDebug($"Arguments: {string.Join(", ", args)}");
 
             if (!HasEnoughArguments(args))
             {
@@ -46,10 +48,9 @@ namespace ZopaQuote
         private bool ValidateFileName(string fileName, out string validatedFileName)
         {
             validatedFileName = Path.Combine(AppContext.BaseDirectory, fileName);
+
             return _fileService.FileExists(validatedFileName);
         }
-
-
 
         private bool HasEnoughArguments(string[] args)
         {
