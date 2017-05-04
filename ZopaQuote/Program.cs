@@ -13,6 +13,7 @@ namespace ZopaQuote
         private const string UnexpectedError = "Unexpected error occurred";
         static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
             var serviceProvider = ConfigureServices();
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
@@ -35,7 +36,7 @@ namespace ZopaQuote
                 logger.LogError(0, ex, UnexpectedError);
                 outputService.Write(UnexpectedError);
             }
-            
+
             outputService.Prompt("End of Program. Press 'Enter' key to exit.");
         }
 
@@ -45,17 +46,20 @@ namespace ZopaQuote
             configurationBuilder.AddJsonFile("config.json", true, true);
             var configuration = configurationBuilder.Build();
             var appConfig = new AppConfiguration();
-            appConfig.LoanAmountRange.Minimum = configuration.GetValue("AppConfiguration:LoanAmountRange:Minimum", 100);
-            appConfig.LoanAmountRange.Maximum = configuration.GetValue("AppConfiguration:LoanAmountRange:Maximum", 1000);
+
+            appConfig.LoanAmountRange.Minimum = configuration.GetValue("AppConfiguration:LoanAmountRange:Minimum", 1000);
+            appConfig.LoanAmountRange.Maximum = configuration.GetValue("AppConfiguration:LoanAmountRange:Maximum", 15000);
+            appConfig.TotalNumberOfPayments = configuration.GetValue("AppConfiguration:TotalNumberOfPayments", 36);
 
             var serviceProvider = new ServiceCollection()
-                    .AddLogging()                    
+                    .AddLogging()
                     .AddSingleton<IOutputService, OutputService>()
                     .AddSingleton<IApplication, Application>()
                     .AddSingleton(appConfig)
                     .AddTransient<IFileService, FileService>()
                     .AddTransient<ICsvConverter<MarketData>, MarketDataCsvConverter>()
                     .AddSingleton<IMarketDataContext, MarketDataContext>()
+                    .AddTransient<IQuoteService, QuoteService>()
                     .BuildServiceProvider();
 
             serviceProvider
@@ -64,6 +68,6 @@ namespace ZopaQuote
                 .AddFile("Application.log", LogLevel.Debug);
 
             return serviceProvider;
-        }        
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace ZopaQuote.Test.QuoteServiceTest
         {
             var mock = new Mock<IMarketDataContext>();
             mock.SetupProperty(c => c.MarketData, data.ToList());
-            return new QuoteService(mock.Object);
+            return new QuoteService(mock.Object, new AppConfiguration());
         }
     }
 }

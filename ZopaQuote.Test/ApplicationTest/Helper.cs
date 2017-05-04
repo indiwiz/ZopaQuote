@@ -7,6 +7,8 @@ namespace ZopaQuote.Test.ApplicationTest
 {
     public class Helper
     {
+        public Mock<IOutputService> OutputServiceMock { get; set; } = new Mock<IOutputService>();
+        public Mock<IQuoteService> QuoteServiceMock { get; set; } = new Mock<IQuoteService>();
         public Mock<ILoggerFactory> LoggerFactoryMock { get; set; } = new Mock<ILoggerFactory>();
         public Mock<IFileService> FileServiceMock { get; set; } = new Mock<IFileService>();
         public AppConfiguration AppConfiguration { get; set; } = new AppConfiguration();
@@ -23,7 +25,9 @@ namespace ZopaQuote.Test.ApplicationTest
             return new Application(LoggerFactoryMock.Object,
                 FileServiceMock.Object,
                 AppConfiguration,
-                MarketDataContextMock.Object);
+                MarketDataContextMock.Object,
+                QuoteServiceMock.Object,
+                OutputServiceMock.Object);
         }
     }
 }

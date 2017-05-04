@@ -2,7 +2,7 @@
   "profiles": {
     "ZopaQuote": {
       "commandName": "Project",
-      "commandLineArgs": "MarketData.csv 2000"
+      "commandLineArgs": "MarketData.csv 1000"
     }
   }
 }

@@ -4,21 +4,26 @@ using ZopaQuote.Entities;
 
 namespace ZopaQuote.Services
 {
-    public class QuoteService
+    public class QuoteService : IQuoteService
     {
         private readonly IMarketDataContext _marketDataContext;
+        private readonly int _totalNumberOfPayments;
 
-        public QuoteService(IMarketDataContext marketDataContext)
+        public QuoteService(IMarketDataContext marketDataContext, AppConfiguration appConfiguration)
         {
             _marketDataContext = marketDataContext;
+            _totalNumberOfPayments = appConfiguration.TotalNumberOfPayments;
         }
 
-        public MarketData GetCompetitiveQuote(int amount)
+        public Quote GetCompetitiveQuote(int amount)
         {
-            return _marketDataContext.MarketData
+            var marketData = _marketDataContext.MarketData
                 .Where(x => x.AvailableAmount > amount)
                 .OrderBy(x => x.Rate)
-                .FirstOrDefault();            
+                .FirstOrDefault();
+            return marketData == null ? null : new Quote(amount, marketData.Rate, _totalNumberOfPayments);
         }
+
+
     }
 }

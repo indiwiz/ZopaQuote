@@ -7,11 +7,18 @@ namespace ZopaQuote.Test.QuoteServiceTest
     {
         [Theory]
         [MemberData(nameof(QuotationDataSource.TestData), MemberType = typeof(QuotationDataSource))]
-        public void Should(MarketData[] input, int loanAmount, MarketData expectedOutput)
+        public void Should_WorkInAllCases(MarketData[] input, int loanAmount, MarketData expectedOutput)
         {
             var sut = Helper.GetServiceUnderTest(input);
             var output = sut.GetCompetitiveQuote(loanAmount);
-            Assert.Equal(expectedOutput, output);
+            if (expectedOutput != null)
+            {
+                Assert.Equal(expectedOutput.Rate, output.Rate);
+            }
+            else
+            {
+                Assert.Null(output);
+            }
         }
     }
 }

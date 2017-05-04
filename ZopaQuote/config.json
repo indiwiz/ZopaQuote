@@ -1,5 +1,6 @@
 ﻿{
   "AppConfiguration": {
+    "TotalNumberOfPayments": "36",
     "LoanAmountRange": {
       "Minimum": "1000",
       "Maximum": "15000"

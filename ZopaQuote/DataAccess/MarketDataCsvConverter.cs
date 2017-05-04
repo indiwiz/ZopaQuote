@@ -15,7 +15,7 @@ namespace ZopaQuote.DataAccess
             {
                 ThrowException($"Unexpected format: {splitData}");
             }
-            if (!decimal.TryParse(splitData[1], out var rate))
+            if (!double.TryParse(splitData[1], out var rate))
             {
                 ThrowException($"Unable to read Rate from {splitData[1]}");
             }

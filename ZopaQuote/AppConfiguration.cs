@@ -2,6 +2,7 @@
 {
     public class AppConfiguration
     {
+        public int TotalNumberOfPayments { get; set; }
         public NumberRange LoanAmountRange { get; set; } = new NumberRange();
         public class NumberRange
         {
