@@ -11,23 +11,20 @@ namespace ZopaQuote
 
         private ValidationException(string message)
             : base(message)
-        {
-            
+        {            
         }
 
         public ValidationException(Exception innerException)
             :base(innerException.Message, innerException)
         {
-
         }
 
         public static ValidationException InvalidArgumentException => new ValidationException(InvalidArguments);
-
         public static ValidationException InvalidFileNameException => new ValidationException(InvalidFileName);
         public static ValidationException InvalidLoanAmountException => new ValidationException(InvalidLoanAmount);
         public static ValidationException LoanAmountNotInRangeException(int minimum, int maximum) =>
             new ValidationException(
                 new ArgumentOutOfRangeException("LoanAmount", 
-                    $"{InvalidLoanAmount} Loan amount should be between {minimum} and {maximum}."));
+                    $"Loan amount out of range, expected to be between {minimum} and {maximum}."));
     }
 }

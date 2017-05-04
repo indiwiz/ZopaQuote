@@ -2,11 +2,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using ZopaQuote.DataAccess;
+using ZopaQuote.Entities;
 using ZopaQuote.Services;
 
 namespace ZopaQuote
 {
-    class Program
+    internal class Program
     {
         private const string UnexpectedError = "Unexpected error occurred";
         static void Main(string[] args)
@@ -33,7 +35,6 @@ namespace ZopaQuote
                 logger.LogError(0, ex, UnexpectedError);
                 outputService.Write(UnexpectedError);
             }
-
             
             outputService.Prompt("End of Program. Press 'Enter' key to exit.");
         }
@@ -44,16 +45,17 @@ namespace ZopaQuote
             configurationBuilder.AddJsonFile("config.json", true, true);
             var configuration = configurationBuilder.Build();
             var appConfig = new AppConfiguration();
-            appConfig.LoanAmountRange.Minimum = configuration.GetValue<int>("AppConfiguration:LoanAmountRange:Minimum", 100);
-            appConfig.LoanAmountRange.Maximum = configuration.GetValue<int>("AppConfiguration:LoanAmountRange:Maximum", 1000);
-
+            appConfig.LoanAmountRange.Minimum = configuration.GetValue("AppConfiguration:LoanAmountRange:Minimum", 100);
+            appConfig.LoanAmountRange.Maximum = configuration.GetValue("AppConfiguration:LoanAmountRange:Maximum", 1000);
 
             var serviceProvider = new ServiceCollection()
                     .AddLogging()                    
                     .AddSingleton<IOutputService, OutputService>()
                     .AddSingleton<IApplication, Application>()
-                    .AddSingleton<AppConfiguration>(appConfig)
+                    .AddSingleton(appConfig)
                     .AddTransient<IFileService, FileService>()
+                    .AddTransient<ICsvConverter<MarketData>, MarketDataCsvConverter>()
+                    .AddSingleton<IMarketDataContext, MarketDataContext>()
                     .BuildServiceProvider();
 
             serviceProvider

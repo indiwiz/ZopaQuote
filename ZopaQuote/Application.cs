@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using ZopaQuote.DataAccess;
 using ZopaQuote.Services;
 
 namespace ZopaQuote
@@ -10,14 +11,17 @@ namespace ZopaQuote
         private readonly ILogger _logger;
         private readonly IFileService _fileService;
         private readonly AppConfiguration _configuration;
+        private readonly IMarketDataContext _marketDataContext;
 
         public Application(
             ILoggerFactory loggerFactory,
             IFileService fileService,
-            AppConfiguration configuration)
+            AppConfiguration configuration,
+            IMarketDataContext marketDataContext)
         {
             _logger = loggerFactory.CreateLogger<Application>();
             _configuration = configuration;
+            _marketDataContext = marketDataContext;
             _fileService = fileService;
         }
 
@@ -25,12 +29,12 @@ namespace ZopaQuote
         {
             _logger.LogDebug($"Arguments: {string.Join(", ", args)}");
 
-            ValidateArguments(args);
+            var (validatedFileName, loanAmount) = ValidateArguments(args);
 
-            throw new Exception("Time pass");
+            _marketDataContext.Initialize(validatedFileName);
         }
 
-        private void ValidateArguments(string[] args)
+        private (string, int) ValidateArguments(string[] args)
         {
             if (!HasEnoughArguments(args))
             {
@@ -51,6 +55,7 @@ namespace ZopaQuote
             {
                 throw ValidationException.LoanAmountNotInRangeException(_configuration.LoanAmountRange.Minimum, _configuration.LoanAmountRange.Maximum);
             }
+            return (validatedFileName, loanAmount);
         }
 
         private bool ValidateLoanAmount(string loanAmount, out int validatedLoanAmount)
@@ -60,7 +65,7 @@ namespace ZopaQuote
 
         private bool IsLoanAmountInRange(int loanAmount)
         {
-            return loanAmount >= _configuration.LoanAmountRange.Minimum 
+            return loanAmount >= _configuration.LoanAmountRange.Minimum
                 && loanAmount <= _configuration.LoanAmountRange.Maximum;
         }
 
@@ -75,7 +80,5 @@ namespace ZopaQuote
         {
             return args.Length == 2;
         }
-
-        
     }
 }
