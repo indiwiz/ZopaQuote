@@ -66,9 +66,9 @@ Dave,0.070,140
 Angela,0.071,60
 ```
 
-## Assumptions
-Some assumptions were made to reduce a little bit of work
+### Assumptions
 * It is assumed that the valid csv file has first line as the header line. 
 * Also it is assumed that the AvailableAmount in the CSV is literal. This assumption was made due to the numbers in the sample file were lower than the minimum amount that can be borrowed (1000).
+* Any line other than the header line is assumed as data. If the line doesn't have 3 values or the second and third values are not valid numbers, the line is ignored. This will appear in the log file as a warning.
 
 
