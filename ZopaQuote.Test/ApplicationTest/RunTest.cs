@@ -71,7 +71,7 @@ namespace ZopaQuote.Test.ApplicationTest
         public void Should_PrintQuote_When_QuoteFound()
         {
             _helper.FileServiceMock.Setup(s => s.FileExists(It.IsAny<string>())).Returns(true);
-            _helper.QuoteServiceMock.Setup(q => q.GetCompetitiveQuote(It.IsAny<int>())).Returns(new Quote(1, 2, 3));
+            _helper.QuoteServiceMock.Setup(q => q.GetCompetitiveQuote(It.IsAny<int>())).Returns(new[] { new Quote(string.Empty, 1, 2, 3) });
             _helper.AppConfiguration.LoanAmountRange.Minimum = 100;
             _helper.AppConfiguration.LoanAmountRange.Maximum = 1000;
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Linq;
 using ZopaQuote.DataAccess;
 using ZopaQuote.Services;
 
@@ -40,20 +41,25 @@ namespace ZopaQuote
 
             _marketDataContext.Initialize(validatedFileName);
 
-            var quote = _quoteService.GetCompetitiveQuote(loanAmount);
+            var quotes = _quoteService.GetCompetitiveQuote(loanAmount).ToList();
 
-            if (quote == null)
+            if (quotes.Any())
             {
-                _outputService.Write("It is not possible to provide a quote at this time.");
+                foreach (var quote in quotes)
+                {
+                    _outputService.Write(
+                        string.Empty,
+                        $"Quote From: {quote.Provider}",
+                        $"Requested amount: {loanAmount:C0}",
+                        $"Rate: {(quote.Rate * 100):0.#}%",
+                        $"Monthly repayment: {quote.MonthlyRepayment:C}",
+                        $"Total repayment {quote.TotalRepayment:C}",
+                        string.Empty);
+                }
             }
             else
             {
-                _outputService.Write(
-                    $"Requested amount: {loanAmount:C0}",
-                    $"Rate: {(quote.Rate * 100):0.#}%",
-                    $"Monthly repayment: {quote.MonthlyRepayment:C}",
-                    $"Total repayment {quote.TotalRepayment:C}"
-                    );
+                _outputService.Write("It is not possible to provide a quote at this time.");
             }
         }
 

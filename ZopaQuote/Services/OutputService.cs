@@ -23,7 +23,7 @@ namespace ZopaQuote.Services
 
         public void ShowHelper(string errorMessage)
         {            
-            Write(errorMessage,
+            Write(string.Empty,$"ERROR: {errorMessage}",string.Empty,
                 $"Usage: {ApplicationName} <filename> <amount>",
                 $"Example: {ApplicationName} MarketData.csv 1200");
         }

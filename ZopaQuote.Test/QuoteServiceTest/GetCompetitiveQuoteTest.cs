@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Linq;
+using Xunit;
 using ZopaQuote.Entities;
 
 namespace ZopaQuote.Test.QuoteServiceTest
@@ -13,11 +14,11 @@ namespace ZopaQuote.Test.QuoteServiceTest
             var output = sut.GetCompetitiveQuote(loanAmount);
             if (expectedOutput != null)
             {
-                Assert.Equal(expectedOutput.Rate, output.Rate);
+                Assert.Equal(expectedOutput.Rate, output.First().Rate);
             }
             else
             {
-                Assert.Null(output);
+                Assert.False(output.Any());
             }
         }
     }

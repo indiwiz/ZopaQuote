@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ZopaQuote.DataAccess;
 using ZopaQuote.Entities;
 
@@ -15,13 +16,12 @@ namespace ZopaQuote.Services
             _totalNumberOfPayments = appConfiguration.TotalNumberOfPayments;
         }
 
-        public Quote GetCompetitiveQuote(int amount)
+        public IEnumerable<Quote> GetCompetitiveQuote(int amount)
         {
-            var marketData = _marketDataContext.MarketData
+            return _marketDataContext.MarketData
                 .Where(x => x.AvailableAmount > amount)
                 .OrderBy(x => x.Rate)
-                .FirstOrDefault();
-            return marketData == null ? null : new Quote(amount, marketData.Rate, _totalNumberOfPayments);
+                .Select(d => new Quote(d.Name, amount, d.Rate, _totalNumberOfPayments));
         }
 
 

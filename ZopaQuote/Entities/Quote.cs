@@ -9,9 +9,11 @@ namespace ZopaQuote.Entities
         public double MonthlyRepayment { get; }
 
         public double TotalRepayment { get; set; }
+        public string Provider { get; set; }
 
-        public Quote(int principalAmount, double rate, int numberOfPayments)
+        public Quote(string provider, int principalAmount, double rate, int numberOfPayments)
         {
+            Provider = provider;
             Rate = rate;
 
             var effectiveRate = rate / 12;
