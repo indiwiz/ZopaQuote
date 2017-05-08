@@ -14,7 +14,7 @@ There are two branches.
 * [Master](https://github.com/indiwizsol/ZopaQuote) branch has elaborate solution where some of the design decisions were made just to demonstrate a pattern or technology features. 
 
 ## How to Install
-> Checkout the [Release v1.0.0](https://github.com/indiwizsol/ZopaQuote/releases/tag/v1.0.0)
+> Checkout the [Release v1.0.1](https://github.com/indiwizsol/ZopaQuote/releases/tag/v1.0.1)
 
 
 ## Requirements
