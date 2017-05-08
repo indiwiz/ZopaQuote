@@ -10,8 +10,8 @@ To demonstrates use of the following:
 
 ## Solution
 There are two branches. 
+* [Master](https://github.com/indiwizsol/ZopaQuote) branch has elaborate solution where some of the design decisions were made just to demonstrate a pattern or technology features. Instead of using different project (which would be the case if this would have been a bigger project with external dependencies), I have arranged code files with in folders to keep it simple. However, by using dependency injection I have kept things de-coupled, which means that if required the files can be saparated out in  different projects with ease. 
 * [QuickSolution](https://github.com/indiwizsol/ZopaQuote/tree/QuickSolution) was initial one hour take at the requirements. 
-* [Master](https://github.com/indiwizsol/ZopaQuote) branch has elaborate solution where some of the design decisions were made just to demonstrate a pattern or technology features. 
 
 ## How to Install
 > Checkout the [Release v1.0.1](https://github.com/indiwizsol/ZopaQuote/releases/tag/v1.0.1)
